@@ -57,23 +57,22 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = "\(indexPath.section) - \(indexPath.row)"
         
-        let config = TableConfig(numberOfRowsInSection: tableView.numberOfRows(inSection: indexPath.section))
-        cell.applyConfig(for: indexPath, config: config)
+        cell.applyConfig(for: indexPath, numberOfCellsInSection: tableView.numberOfRows(inSection: indexPath.section))
         
         return cell
     }
 }
 
 extension UITableViewCell {
-    func applyConfig(for indexPath: IndexPath, config: TableConfig) {
+    func applyConfig(for indexPath: IndexPath, numberOfCellsInSection: Int) {
         switch indexPath.row {
-        case config.numberOfRowsInSection - 1:
+        case numberOfCellsInSection - 1:
             // This is the case when the cell is last in the section,
             // so we round to bottom corners
             self.roundCorners(.bottom, radius: 15)
             
             // However, if it's the only one, round all four
-            if config.numberOfRowsInSection == 1 {
+            if numberOfCellsInSection == 1 {
                 self.roundCorners(.all, radius: 15)
             }
             
@@ -97,9 +96,4 @@ extension UITableViewCell {
             self.contentView.layer.addSublayer(bottomBorder)
         }
     }
-}
-
-// Helper struct to keep track of how many cells there are in a section
-struct TableConfig {
-    var numberOfRowsInSection: Int
 }
